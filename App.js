@@ -31,7 +31,7 @@ function SplashScreen({ navigation }) {
       }).start(() => {
         navigation.navigate("Login");
       });
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [fadeAnim, navigation]);

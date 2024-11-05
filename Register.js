@@ -123,11 +123,6 @@ export default function Register() {
             placeholder="Email Address"
             placeholderTextColor="#555"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Contact Number"
-            placeholderTextColor="#555"
-          />
 
           <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
             <LinearGradient
