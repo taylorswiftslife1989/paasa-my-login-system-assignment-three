@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  Animated,
   ImageBackground,
   SafeAreaView,
 } from "react-native";
@@ -13,48 +12,48 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPass from "./ForgotPass";
-import Dashboard from "./Dashboard";
+import Home from "./Home";
 import VerifyPass from "./VerifyPass";
 import CreatePass from "./CreatePass";
+import ProfilePage from "./ProfilePage";
 
 const Stack = createStackNavigator();
 
 function SplashScreen({ navigation }) {
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start(() => {
-        navigation.navigate("Login");
-      });
+      navigation.navigate("Login");
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [fadeAnim, navigation]);
+  }, [navigation]);
 
   return (
     <ImageBackground
-      source={require("./assets/background.jpg")} // Path to your background image
+      source={require("./assets/background.jpg")}
       style={styles.background}
     >
-      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+      <View style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
-          <Text style={styles.title}>
-            MY{"\n"}LOGIN{"\n"}SYSTEM
+          <Image
+            source={require("./assets/logo.png")}
+            style={styles.logoImage}
+          />
+          <Text style={styles.title}>BLAZEMART</Text>
+          <Text style={styles.subtitle}>
+            "Shop Smart, BlazeMart"{"\n"}The Trailblazers' Marketplace
           </Text>
-          <View style={styles.profileBorder}>
+          <View style={styles.footer}>
             <Image
-              source={require("./assets/profile.jpg")} // Path to your profile image
-              style={styles.profileImage}
+              source={require("./assets/ustp.png")}
+              style={styles.footerImage}
             />
+            <Text style={styles.footerText}>
+              USTP - CDO 2024 © All Rights Reserved
+            </Text>
           </View>
-          <Text style={styles.footerText}>Christian Paasa</Text>
         </SafeAreaView>
-      </Animated.View>
+      </View>
     </ImageBackground>
   );
 }
@@ -72,8 +71,9 @@ export default function App() {
         <Stack.Screen name="ForgotPass" component={ForgotPass} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="VerifyPass" component={VerifyPass} />
-        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="CreatePass" component={CreatePass} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -93,32 +93,46 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 20,
+  },
+  logoImage: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
   title: {
-    color: "#fff",
-    fontSize: 50, // Font size for the title
-    fontWeight: "800", // Font weight for the title
-    textAlign: "left",
+    color: "#000",
+    fontSize: 45,
+    fontWeight: "800",
+    textAlign: "center",
   },
-  profileBorder: {
-    width: 108,
-    height: 108,
-    borderRadius: 54,
-    justifyContent: "center",
+  subtitle: {
+    color: "#000",
+    fontSize: 17,
+    fontStyle: "italic",
+    textAlign: "center",
+    fontWeight: "800",
+    marginVertical: 10,
+    lineHeight: 22,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 20,
     alignItems: "center",
-    borderWidth: 4,
-    borderColor: "#D66464",
-    marginTop: 20,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  footerImage: {
+    width: 80,
+    height: 80,
+    resizeMode: "contain",
+    marginBottom: 10,
   },
   footerText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 20,
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 0,
+    marginBottom: 20,
   },
 });

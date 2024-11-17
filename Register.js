@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,9 +16,9 @@ import { useNavigation } from "@react-navigation/native";
 export default function Register() {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [selectedGender, setSelectedGender] = useState(null);
 
   useEffect(() => {
-    // Start with the fade-in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000,
@@ -37,9 +37,19 @@ export default function Register() {
   };
 
   const handleSignUp = () => {
-    Alert.alert("Registration", "Account Registration has done Successfully", [
-      { text: "OK", onPress: () => navigation.navigate("Login") },
-    ]);
+    if (!selectedGender) {
+      Alert.alert("Error", "Please select your gender.");
+      return;
+    }
+    Alert.alert(
+      "Registration",
+      "Account Registration has been completed successfully",
+      [{ text: "OK", onPress: () => navigation.navigate("Login") }]
+    );
+  };
+
+  const handleUploadCOR = () => {
+    Alert.alert("Upload COR", "COR uploaded successfully.");
   };
 
   return (
@@ -47,92 +57,90 @@ export default function Register() {
       source={require("./assets/background.jpg")}
       style={styles.background}
     >
-      {/* Dark overlay for dimming effect */}
       <Animated.View style={[styles.overlay, { opacity: fadeAnim }]} />
 
       <SafeAreaView style={styles.safeArea}>
         <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-            <LinearGradient
-              colors={["#D66464", "#703434"]}
-              style={styles.backButtonGradient}
-            >
-              <Text style={styles.backButtonText}>Back</Text>
-            </LinearGradient>
+          <TouchableOpacity
+            style={[styles.backButton, { backgroundColor: "#4E56A0" }]}
+            onPress={handleBackPress}
+          >
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
 
           <Text style={styles.title}>Registration Form</Text>
-          <Text style={styles.subtitle}>Kindly fill up the details below:</Text>
+          <Text style={styles.subtitle}>Please fill in the details below:</Text>
 
-          <View style={styles.radioGroup}>
-            <Text style={styles.radioLabel}>I am a/an:</Text>
+          <Text style={styles.label}>COR</Text>
+
+          <TouchableOpacity
+            style={[styles.uploadButton, { backgroundColor: "#4E56A0" }]}
+            onPress={handleUploadCOR}
+          >
+            <Text style={styles.uploadButtonText}>Upload COR</Text>
+          </TouchableOpacity>
+          <Text style={styles.label}>ID Number</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Required"
+            placeholderTextColor="#555"
+          />
+
+          <Text style={styles.label}>Full Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Required"
+            placeholderTextColor="#555"
+          />
+
+          <Text style={styles.genderText}>Gender:</Text>
+          <View style={styles.genderContainer}>
             <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#703434" }]}
+              style={[
+                styles.genderOption,
+                selectedGender === "Male" && styles.selectedGenderOption,
+              ]}
+              onPress={() => setSelectedGender("Male")}
             >
-              <Text style={styles.radioText}>Trailblazer</Text>
+              <Text style={styles.genderOptionText}>Male</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#703434" }]}
+              style={[
+                styles.genderOption,
+                selectedGender === "Female" && styles.selectedGenderOption,
+              ]}
+              onPress={() => setSelectedGender("Female")}
             >
-              <Text style={styles.radioText}>Outsider</Text>
+              <Text style={styles.genderOptionText}>Female</Text>
             </TouchableOpacity>
           </View>
 
+          <Text style={styles.label}>Address</Text>
           <TextInput
             style={styles.input}
-            placeholder="ID No."
-            placeholderTextColor="#555"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
+            placeholder="Required"
             placeholderTextColor="#555"
           />
 
-          <View style={styles.radioGroup}>
-            <Text style={styles.radioLabel}>Gender:</Text>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#703434" }]}
-            >
-              <Text style={styles.radioText}>Male</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#703434" }]}
-            >
-              <Text style={styles.radioText}>Female</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#703434" }]}
-            >
-              <Text style={styles.radioText}>Prefer not to say</Text>
-            </TouchableOpacity>
-          </View>
-
+          <Text style={styles.label}>Email Address</Text>
           <TextInput
             style={styles.input}
-            placeholder="Contact Number"
-            placeholderTextColor="#555"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Address"
-            placeholderTextColor="#555"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email Address"
+            placeholder="Required"
             placeholderTextColor="#555"
           />
 
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-            <LinearGradient
-              colors={["#D66464", "#703434"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.signUpButtonGradient}
-            >
-              <Text style={styles.signUpButtonText}>Sign Up</Text>
-            </LinearGradient>
+          <Text style={styles.label}>Contact Number</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Required"
+            placeholderTextColor="#555"
+          />
+
+          <TouchableOpacity
+            style={[styles.signUpButton, { backgroundColor: "#4E56A0" }]}
+            onPress={handleSignUp}
+          >
+            <Text style={styles.signUpButtonText}>SIGN UP</Text>
           </TouchableOpacity>
         </Animated.View>
       </SafeAreaView>
@@ -151,7 +159,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Dimming effect
+    backgroundColor: "transparent", // Change from "rgba(0, 0, 0, 0.5)"
   },
   safeArea: {
     flex: 1,
@@ -163,84 +171,115 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 40,
-    left: 20,
-    borderWidth: 3,
-    borderColor: "#F2A4A4",
-    borderRadius: 25,
+    width: "20%",
+    height: 45,
+    top: 10,
+    left: 55,
     overflow: "hidden",
-  },
-  backButtonGradient: {
-    padding: 10,
-    borderRadius: 25,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   backButtonText: {
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: 800,
     textAlign: "center",
   },
   title: {
-    color: "#fff",
-    fontSize: 28,
+    color: "#000",
+    fontSize: 25,
     fontWeight: "bold",
+    top: 10,
     textAlign: "center",
     marginBottom: 10,
   },
   subtitle: {
-    color: "#fff",
-    fontSize: 16,
+    color: "#000",
+    fontSize: 15,
+    top: 5,
     marginBottom: 20,
     textAlign: "center",
+  },
+  label: {
+    color: "#000",
+    fontSize: 16,
+    marginTop: 5,
+    textAlign: "left",
+    width: "70%",
+    alignSelf: "center",
   },
   input: {
-    width: "80%",
-    height: 50,
+    width: "70%",
+    height: 40,
     backgroundColor: "#ddd",
-    borderRadius: 25,
+    borderRadius: 10,
     paddingHorizontal: 15,
     fontSize: 16,
-    marginVertical: 10,
+    marginVertical: 5,
     textAlign: "center",
-    borderColor: "#F2A4A4",
-    borderWidth: 3,
+    borderColor: "#4E56A0",
+    borderWidth: 2,
   },
-  radioGroup: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  radioLabel: {
-    color: "#fff",
-    fontSize: 16,
-    marginRight: 10,
-  },
-  radioButton: {
-    padding: 10,
-    borderRadius: 25,
-    marginHorizontal: 5,
-  },
-  radioText: {
-    color: "#fff",
-  },
-  signUpButton: {
-    width: "80%",
-    height: 50,
-    borderRadius: 25,
-    overflow: "hidden",
-    marginVertical: 20,
-    borderColor: "#F2A4A4",
-    borderWidth: 3,
-  },
-  signUpButtonGradient: {
-    flex: 1,
+  uploadButton: {
+    width: "70%",
+    height: 40,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 25,
+    marginVertical: 10,
+    borderColor: "#4E56A0",
+    borderWidth: 2,
   },
-  signUpButtonText: {
+  uploadButtonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  signUpButton: {
+    width: "40%",
+    height: 55,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  signUpButtonText: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  genderText: {
+    color: "#000",
+    fontSize: 16,
+    marginTop: 5,
+    left: 20,
+    textAlign: "left",
+    width: "80%",
+    alignSelf: "center",
+  },
+  genderContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginVertical: 10,
+    width: "80%",
+  },
+  genderOption: {
+    width: 80,
+    height: 40,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#4E56A0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectedGenderOption: {
+    color: "#fff",
+    backgroundColor: "#4E56A0",
+  },
+  genderOptionText: {
+    fontSize: 16,
+    color: "#000",
   },
 });

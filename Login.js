@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  Image,
   Animated,
   View,
 } from "react-native";
@@ -15,34 +16,27 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 export default function Login() {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const moveAnim = useRef(new Animated.Value(0)).current;
   const [loading, setLoading] = useState(false);
 
-  const startFadeIn = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  };
-
   useEffect(() => {
-    startFadeIn();
+    // Animation sequence: move to a slightly higher position, then fade in the rest
+    Animated.sequence([
+      Animated.timing(moveAnim, {
+        toValue: -150, // Adjusted to a smaller value for a moderate upward movement
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      startFadeIn();
-    }, [])
-  );
 
   const handleButtonPress = (navigateTo) => {
     setLoading(true);
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-
     setTimeout(() => {
       setLoading(false);
       navigation.navigate(navigateTo);
@@ -54,12 +48,19 @@ export default function Login() {
       source={require("./assets/background.jpg")}
       style={styles.background}
     >
-      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-        <Text style={styles.title}>
-          MY{"\n"}LOGIN{"\n"}SYSTEM
+      {/* Header section with move animation */}
+      <Animated.View
+        style={[styles.container, { transform: [{ translateY: moveAnim }] }]}
+      >
+        <Image source={require("./assets/logo.png")} style={styles.logo} />
+        <Text style={styles.title}>BLAZEMART</Text>
+        <Text style={styles.subtitle}>
+          "Shop Smart, BlazeMart"{"\n"}The Trailblazers' Marketplace
         </Text>
-        <Text style={styles.subtitle}>This is my Login System</Text>
+      </Animated.View>
 
+      {/* Rest of elements with fade-in effect */}
+      <Animated.View style={[styles.fadeContainer, { opacity: fadeAnim }]}>
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -74,11 +75,11 @@ export default function Login() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleButtonPress("Dashboard")}
+          onPress={() => handleButtonPress("Home")}
           disabled={loading}
         >
           <LinearGradient
-            colors={["#D66464", "#703434"]}
+            colors={["#4E56A0", "#252A55"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.buttonGradient}
@@ -88,37 +89,27 @@ export default function Login() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleButtonPress("Register")}
-          disabled={loading}
-        >
-          <LinearGradient
-            colors={["#D66464", "#703434"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.buttonGradient}
-          >
-            <Text style={styles.buttonText}>REGISTER</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           onPress={() => handleButtonPress("ForgotPass")}
           disabled={loading}
         >
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
+
+        <Text style={styles.registerText}>
+          Don’t have an account?{" "}
+          <Text
+            style={styles.registerLink}
+            onPress={() => handleButtonPress("Register")}
+          >
+            {"\n"}Create your Account here
+          </Text>
+        </Text>
       </Animated.View>
 
       {/* Loading Overlay */}
       {loading && (
-        <Animated.View
-          style={[
-            styles.loadingOverlay,
-            { opacity: fadeAnim }, // Bind opacity to fadeAnim for overlay
-          ]}
-        >
-          <ActivityIndicator size="large" color="#fff" />
+        <Animated.View style={[styles.loadingOverlay, { opacity: fadeAnim }]}>
+          <ActivityIndicator size="100" color="#fff" />
         </Animated.View>
       )}
     </ImageBackground>
@@ -134,62 +125,90 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    paddingHorizontal: 20,
+  },
+  fadeContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginTop: 30, // Moved up by 100 pixels from 200 to 100
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginTop: 430,
+    marginBottom: 20,
   },
   title: {
-    color: "#fff",
-    fontSize: 50,
-    fontWeight: "900",
-    textAlign: "left",
-    marginBottom: 10,
+    color: "#000",
+    fontSize: 45,
+    fontWeight: "800",
+    textAlign: "center",
   },
   subtitle: {
-    color: "#fff",
-    fontSize: 16,
-    marginBottom: 20,
+    color: "#333",
+    fontSize: 17,
     textAlign: "center",
+    fontWeight: "800",
+    fontStyle: "italic",
+    marginVertical: 10,
   },
   input: {
-    width: "80%",
-    height: 50,
-    backgroundColor: "#ddd",
-    borderRadius: 25,
+    width: "75%",
+    height: 45,
+    backgroundColor: "#fff",
+    borderRadius: 10,
     paddingHorizontal: 15,
     fontSize: 16,
-    marginVertical: 10,
+    fontWeight: "700",
+    marginVertical: 5,
     textAlign: "center",
-    borderColor: "#F2A4A4",
-    borderWidth: 3,
+    borderColor: "#7190BF",
+    borderWidth: 2,
+  },
+  forgotPassword: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "800",
+    textAlign: "right",
+    width: "80%",
+    marginTop: 5,
+    textDecorationLine: "underline",
   },
   button: {
-    width: "80%",
-    height: 50,
-    borderRadius: 25,
+    width: "45%",
+    height: 70,
+    borderRadius: 10,
     overflow: "hidden",
-    marginVertical: 10,
-    borderColor: "#F2A4A4",
-    borderWidth: 3,
+    marginVertical: 15,
   },
   buttonGradient: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 25,
+    borderRadius: 10,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontFamily: "Times New Roman",
+    fontSize: 35,
     fontWeight: "bold",
   },
-  forgotPassword: {
-    color: "#fff",
-    fontSize: 14,
-    marginTop: 10,
+  registerText: {
+    color: "#000",
+    fontSize: 16,
+    marginTop: 20,
+    fontWeight: "800",
+    textAlign: "center",
+  },
+  registerLink: {
+    color: "#4e5d94",
     textDecorationLine: "underline",
+    fontWeight: "800",
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.6)", // Semi-transparent overlay
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
