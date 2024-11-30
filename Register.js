@@ -10,13 +10,18 @@ import {
   Animated,
   SafeAreaView,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Register() {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [selectedGender, setSelectedGender] = useState(null);
+  const [idNumber, setIdNumber] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -37,10 +42,28 @@ export default function Register() {
   };
 
   const handleSignUp = () => {
-    if (!selectedGender) {
-      Alert.alert("Error", "Please select your gender.");
+    // Email validation regex for specific domains
+    const emailRegex =
+      /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|ustp\.edu\.ph)$/;
+
+    if (
+      !idNumber ||
+      !fullName ||
+      !selectedGender ||
+      !address ||
+      !email ||
+      !contactNumber
+    ) {
+      Alert.alert("Error", "All fields are required. Please fill them out.");
       return;
     }
+
+    // Validate email address
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Must be a valid email address.");
+      return;
+    }
+
     Alert.alert(
       "Registration",
       "Account Registration has been completed successfully",
@@ -57,6 +80,12 @@ export default function Register() {
       source={require("./assets/background.jpg")}
       style={styles.background}
     >
+      <StatusBar
+        barStyle={Platform.OS === "ios" ? "dark-content" : "light-content"}
+        backgroundColor="transparent"
+        translucent
+      />
+
       <Animated.View style={[styles.overlay, { opacity: fadeAnim }]} />
 
       <SafeAreaView style={styles.safeArea}>
@@ -84,6 +113,9 @@ export default function Register() {
             style={styles.input}
             placeholder="Required"
             placeholderTextColor="#555"
+            value={idNumber}
+            onChangeText={setIdNumber}
+            keyboardType="numeric" // Ensures number pad for input
           />
 
           <Text style={styles.label}>Full Name</Text>
@@ -91,6 +123,8 @@ export default function Register() {
             style={styles.input}
             placeholder="Required"
             placeholderTextColor="#555"
+            value={fullName}
+            onChangeText={setFullName}
           />
 
           <Text style={styles.genderText}>Gender:</Text>
@@ -120,6 +154,8 @@ export default function Register() {
             style={styles.input}
             placeholder="Required"
             placeholderTextColor="#555"
+            value={address}
+            onChangeText={setAddress}
           />
 
           <Text style={styles.label}>Email Address</Text>
@@ -127,6 +163,8 @@ export default function Register() {
             style={styles.input}
             placeholder="Required"
             placeholderTextColor="#555"
+            value={email}
+            onChangeText={setEmail}
           />
 
           <Text style={styles.label}>Contact Number</Text>
@@ -134,7 +172,11 @@ export default function Register() {
             style={styles.input}
             placeholder="Required"
             placeholderTextColor="#555"
+            value={contactNumber}
+            onChangeText={setContactNumber}
+            keyboardType="numeric" // Ensures number pad for input
           />
+          
 
           <TouchableOpacity
             style={[styles.signUpButton, { backgroundColor: "#4E56A0" }]}
@@ -163,9 +205,12 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    backgroundColor: "transparent",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -173,7 +218,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "20%",
     height: 45,
-    top: 10,
+    top: 25,
     left: 55,
     overflow: "hidden",
     borderRadius: 10,
@@ -190,15 +235,15 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 25,
     fontWeight: "bold",
-    top: 10,
+    top: 20,
     textAlign: "center",
     marginBottom: 10,
   },
   subtitle: {
     color: "#000",
     fontSize: 15,
-    top: 5,
-    marginBottom: 20,
+    top: 8,
+    marginBottom: 10,
     textAlign: "center",
   },
   label: {
@@ -210,19 +255,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   input: {
-    width: "70%",
-    height: 40,
+    width: "75%",
+    height: 43,
     backgroundColor: "#ddd",
     borderRadius: 10,
     paddingHorizontal: 15,
     fontSize: 16,
-    marginVertical: 5,
+    marginVertical: 3,
     textAlign: "center",
     borderColor: "#4E56A0",
     borderWidth: 2,
   },
   uploadButton: {
-    width: "70%",
+    width: "75%",
     height: 40,
     borderRadius: 10,
     justifyContent: "center",

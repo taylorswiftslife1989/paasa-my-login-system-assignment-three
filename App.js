@@ -16,6 +16,12 @@ import Home from "./Home";
 import VerifyPass from "./VerifyPass";
 import CreatePass from "./CreatePass";
 import ProfilePage from "./ProfilePage";
+import AdminLogin from "./dev/AdminLogin";
+import AdminHome from "./dev/AdminHome";
+import MySavedPage from "./MySavedPage";
+import Marketplace from "./Marketplace";
+import MessagePage from "./MessagePage";
+import SellProduct from "./SellProduct";
 
 const Stack = createStackNavigator();
 
@@ -73,7 +79,13 @@ export default function App() {
         <Stack.Screen name="VerifyPass" component={VerifyPass} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="CreatePass" component={CreatePass} />
+        <Stack.Screen name="Marketplace" component={Marketplace} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        <Stack.Screen name="Admin_Login" component={AdminLogin} />
+        <Stack.Screen name="Admin_Home" component={AdminHome} />
+        <Stack.Screen name="MySavedPage" component={MySavedPage} />
+        <Stack.Screen name="MessagePage" component={MessagePage} />
+        <Stack.Screen name="SellProduct" component={SellProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );

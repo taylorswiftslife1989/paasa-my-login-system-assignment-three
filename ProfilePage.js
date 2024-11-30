@@ -50,17 +50,21 @@ export default function ProfilePage() {
           source={require("./assets/background.jpg")}
           style={styles.background}
         >
-          {/* Top Container with Logo, Cart, and Message Icons */}
           <View style={styles.topContainer}>
             <Image source={require("./assets/logo.png")} style={styles.logo} />
+            <Text style={styles.logoText}>BLAZEMART</Text>
             <View style={styles.topIcons}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MySavedPage")}
+              >
                 <Image
-                  source={require("./assets/home/cart.png")}
+                  source={require("./assets/home/heart.png")}
                   style={styles.topIcon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MessagePage")}
+              >
                 <Image
                   source={require("./assets/home/message.png")}
                   style={styles.message_topIcon}
@@ -72,29 +76,55 @@ export default function ProfilePage() {
           {/* Profile Information */}
           <View style={styles.profileContainer}>
             <Image
-              source={require("./assets/profile/profile-picture.jpg")}
+              source={require("./assets/profile/profile_icon.png")}
               style={styles.profileImage}
             />
-            <Text style={styles.profileName}>Billie Eilish</Text>
+            <Text style={styles.profileName}>First Name Last Name</Text>
           </View>
 
           {/* Action Buttons */}
           <View style={styles.actionContainer}>
-            <TouchableOpacity style={styles.actionButton}>
-              <Text style={styles.actionText}>View Profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <Text style={styles.actionText}>Edit Profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <Text style={styles.actionText}>Settings</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={handleLogout}
-            >
-              <Text style={styles.actionText}>Logout</Text>
-            </TouchableOpacity>
+            <View style={styles.background_for_actionContainer}>
+              <TouchableOpacity style={styles.actionButton}>
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={require("./assets/profile/profile_icon.png")}
+                    style={styles.iconImage}
+                  />
+                </View>
+                <Text style={styles.actionText}>View Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton}>
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={require("./assets/profile/edit_profile.png")}
+                    style={styles.iconImage}
+                  />
+                </View>
+                <Text style={styles.actionText}>Edit Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton}>
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={require("./assets/profile/setting.png")}
+                    style={styles.iconImage}
+                  />
+                </View>
+                <Text style={styles.actionText}>Settings</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={handleLogout}
+              >
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={require("./assets/profile/logout.png")}
+                    style={styles.iconImage}
+                  />
+                </View>
+                <Text style={styles.actionText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -140,7 +170,10 @@ export default function ProfilePage() {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navCircle}>
+        <TouchableOpacity
+          style={styles.navCircle}
+          onPress={() => navigation.navigate("Marketplace")}
+        >
           <Image
             source={require("./assets/navigation/marketplace.png")}
             style={styles.icon}
@@ -180,27 +213,39 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 0,
-    paddingVertical: 15,
+    paddingVertical: 35,
   },
   logo: {
     width: 100,
     height: 50,
-    left: 0,
+    left: 10,
     resizeMode: "contain",
+  },
+  logoText: {
+    fontSize: 24, // Adjust the size to match the logo height visually
+    fontWeight: "bold", // Optional styling for emphasis
+    color: "#201B51", // Set a color that matches your theme
+    right: 30,
+    bottom: 5,
+    height: 50, // Same height as the logo
+    lineHeight: 50, // Center the text vertically within its container
   },
   topIcons: {
     flexDirection: "row",
+    right: 33,
   },
   topIcon: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     marginLeft: 10,
+    backgroundColor: "#4E56A0",
+    borderRadius: 30,
   },
   message_topIcon: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     marginLeft: 10,
-    borderRadius: 20,
+    borderRadius: 30,
   },
   profileContainer: {
     alignItems: "center",
@@ -219,29 +264,70 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFF",
   },
+
   actionContainer: {
     marginTop: 20,
-    paddingHorizontal: 20,
+    alignItems: "center",
+    paddingHorizontal: 16, // Optimized padding
   },
-  actionButton: {
+
+  background_for_actionContainer: {
+    marginTop: 20,
+    borderRadius: 20, // Smaller for smoother corners
+    paddingVertical: 15, // Consistent inner padding
+    paddingHorizontal: 16,
     backgroundColor: "#4E56A0",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginVertical: 5,
+    alignItems: "center",
+    width: "80%", // Ensures better adaptability to different screen sizes
   },
+
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#7190BF",
+    paddingVertical: 14, // Balanced vertical padding
+    paddingHorizontal: 18, // Improved horizontal padding
+    borderRadius: 12, // Slightly rounded corners
+    marginVertical: 8, // Reduced spacing between buttons
+    width: "90%", // Utilize full width of the container
+    elevation: 3, // Add slight shadow for better contrast
+  },
+
+  iconContainer: {
+    width: 50, // Adjusted to balance button size
+    height: 50,
+    backgroundColor: "#4E56A0",
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 20, // Balanced spacing between icon and text
+    borderColor: "#FFFFFF",
+    borderWidth: 3,
+  },
+
+  iconImage: {
+    width: 32, // Resized for consistency
+    height: 32,
+    resizeMode: "contain",
+  },
+
   actionText: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "800",
+    textAlign: "left",
+    marginLeft: 25,
+    flex: 1, // Allow text to expand if needed
   },
+
   bottomNavigation: {
-    height: 75,
+    height: 90,
     backgroundColor: "#7190BF",
     borderRadius: 20,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
+    paddingHorizontal: 25,
   },
   navCircle: {
     width: 60,

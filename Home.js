@@ -32,24 +32,36 @@ export default function Home() {
           source={require("./assets/background.jpg")}
           style={styles.background}
         >
-          {/* Top Container with Search, Cart, and Message Icons */}
+          {/* Top Container with Search, Heart, and Message Icons */}
           <View style={styles.topContainer}>
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Browse Products here..."
-              placeholderTextColor="#000"
-            />
-            <View style={styles.topIcons}>
-              <TouchableOpacity>
+            <View style={{ flex: 1, position: "relative" }}>
+              <View style={styles.searchIconContainer}>
                 <Image
-                  source={require("./assets/home/cart.png")}
+                  source={require("./assets/home/search.png")}
+                  style={styles.searchIcon}
+                />
+              </View>
+              <TextInput
+                style={styles.searchBar}
+                placeholder="Search Products..."
+                placeholderTextColor="#000"
+              />
+            </View>
+            <View style={styles.topIcons}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MySavedPage")}
+              >
+                <Image
+                  source={require("./assets/home/heart.png")}
                   style={styles.topIcon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MessagePage")}
+              >
                 <Image
                   source={require("./assets/home/message.png")}
-                  style={styles.message_topIcon}
+                  style={styles.topIcon}
                 />
               </TouchableOpacity>
             </View>
@@ -122,7 +134,10 @@ export default function Home() {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navCircle}>
+        <TouchableOpacity
+          style={styles.navCircle}
+          onPress={() => navigation.navigate("Marketplace")}
+        >
           <Image
             source={require("./assets/navigation/marketplace.png")}
             style={styles.icon}
@@ -136,7 +151,7 @@ export default function Home() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navCircle}
-          onPress={() => navigation.navigate("ProfilePage")} // Navigate to ProfilePage
+          onPress={() => navigation.navigate("ProfilePage")}
         >
           <Image
             source={require("./assets/navigation/profile.png")}
@@ -163,7 +178,7 @@ const styles = StyleSheet.create({
   topContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: 30,
+    paddingTop: 45,
     paddingHorizontal: 35,
     paddingBottom: 20,
     justifyContent: "space-between",
@@ -172,10 +187,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
     borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    fontSize: 16,
-    marginRight: 10,
+    paddingVertical: 10,
+    paddingLeft: 50, // Add padding to the left for the icon
+    position: "relative",
+    zIndex: 1, // Ensure the search bar is below the icon
+  },
+  searchIconContainer: {
+    position: "absolute",
+    height: "100%",
+    width: 45, // Adjust width as needed
+    backgroundColor: "#4E56A0",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    zIndex: 2, // Ensure the icon is above the search bar
+  },
+  searchIcon: {
+    width: 20,
+    height: 20,
   },
   topIcons: {
     flexDirection: "row",
@@ -185,9 +214,8 @@ const styles = StyleSheet.create({
     height: 45,
     marginLeft: 10,
     resizeMode: "contain",
-    backgroundColor: "#201b51",
-    borderWidth: 2,
-    borderRadius: 5,
+    backgroundColor: "#4E56A0",
+    borderRadius: 30,
   },
   message_topIcon: {
     width: 45,
@@ -208,15 +236,15 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   sectionIcon: {
-    width: 50, // Increased width to accommodate padding
-    height: 50, // Increased height to accommodate padding
+    width: 45, // Increased width to accommodate padding
+    height: 45, // Increased height to accommodate padding
     margin: 10,
     marginRight: 5,
     backgroundColor: "#201b51",
-    borderRadius: 5, // Adjusted border radius for a perfect circle
+    borderRadius: 10, // Adjusted border radius for a perfect circle
   },
   sectionTitle: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "800",
     color: "#201B51",
   },
@@ -230,17 +258,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 5,
     alignItems: "center",
-    width: 150,
+    width: 170,
   },
   productImage: {
     width: "100%",
-    height: 180,
+    height: 190, // Adjusted height
     borderRadius: 10,
     marginBottom: 5,
     resizeMode: "contain",
   },
   productTitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#FFF",
     fontWeight: "600",
     textAlign: "center",
@@ -251,25 +279,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bottomNavigation: {
-    height: 75,
+    height: 95,
     backgroundColor: "#7190BF",
-    marginTop: 5,
     borderRadius: 20,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     width: "100%",
-    padding: 20,
+    paddingHorizontal: 30,
   },
   navCircle: {
-    width: 65,
-    height: 65,
+    width: 60,
+    height: 60,
     backgroundColor: "#4E56A0",
     borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
   },
-
   home_navCircle: {
     width: 65,
     height: 65,
@@ -280,7 +306,6 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "#fff",
   },
-
   icon: {
     width: 28,
     height: 28,

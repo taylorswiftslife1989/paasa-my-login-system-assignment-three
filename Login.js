@@ -40,7 +40,7 @@ export default function Login() {
     setTimeout(() => {
       setLoading(false);
       navigation.navigate(navigateTo);
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -104,6 +104,16 @@ export default function Login() {
             {"\n"}Create your Account here
           </Text>
         </Text>
+
+        <TouchableOpacity
+          style={styles.adminButton}
+          onPress={() => handleButtonPress("Admin_Login")} // Matches the route name in the navigator
+        >
+          <Image
+            source={require("./assets/admin_icon.png")}
+            style={styles.adminIcon}
+          />
+        </TouchableOpacity>
       </Animated.View>
 
       {/* Loading Overlay */}
@@ -212,5 +222,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
+  },
+
+  adminButton: {
+    width: 50, // Adjust based on desired size
+    height: 50,
+    backgroundColor: "#4E56A0",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    marginTop: 20, // Add spacing after the "Create your Account Here" button
+  },
+  adminIcon: {
+    width: 30, // Adjust to fit icon size
+    height: 30,
   },
 });
